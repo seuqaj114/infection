@@ -20,36 +20,27 @@ class User():
 		self.students = students
 		self.name = name
 		self.student_count = None
+		self.coach_list = None
 
 	def __str__(self):
-		return "(version=%s, coach=%s, students=%s, name=%s, student_cnt=%s)" % \
-				(self.version,self.coach,self.students,self.name,self.student_count)
+		return "(version=%s, coach=%s, students=%s, name=%s, student_cnt=%s, coach_list=%s)" % \
+				(self.version,self.coach,self.students,self.name,self.student_count,self.coach_list)
 
 def recursive_add(coach_id,user_list):
 	global hierarchy
 	global standard_version
 
 	#print coach_id, user_list
-	if user_list == None:
-		return 0
-	else:
-		for user_id in user_list:
-			print user_list[user_id]
-			try:
-				hierarchy[user_id]=User(standard_version,coach_id,user_list[user_id].keys(),None)
-			except AttributeError:
-				hierarchy[user_id]=User(standard_version,coach_id,None,None)
-			
-			recursive_add(user_id,user_list[user_id])
 
-			"""
-			if user_list[user_id] != None:
-				hierarchy[user_id]=User(standard_version,coach_id,user_list[user_id].keys(),None)
-				recursive_add(user_id,user_list[user_id])
-			else:
-				hierarchy[user_id]=User(standard_version,coach_id,None,None)
-				return 1
-			"""
+	for user_id in user_list:
+		#print user_list[user_id]
+		if user_list[user_id] != None:
+			hierarchy[user_id]=User(standard_version,coach_id,user_list[user_id].keys(),None)
+			recursive_add(user_id,user_list[user_id])
+		else:
+			hierarchy[user_id]=User(standard_version,coach_id,None,None)
+			pass
+			
 	return 0
 
 def spread_infection(user_id,version):
@@ -123,6 +114,7 @@ def set_hierarchy(user_list):
 
 	recursive_add(None,user_list)
 	set_student_counts()
+	set_coach_lists()
 
 	for key, value in hierarchy.items():
 		print key, value
@@ -152,6 +144,57 @@ def set_student_counts():
 		hierarchy[user_id].student_count = count
 
 	print "Student counts set."
+
+def set_coach_lists():
+	global hierarchy
+
+	for user_id in hierarchy.keys():
+		user = hierarchy[user_id]
+		coach_list = []
+
+		while user.coach != None:
+			coach_list.append(user.coach)
+			user = hierarchy[user.coach]
+
+		hierarchy[user_id].coach_list = coach_list
+
+def get_ordered_user_list(include_singular=False):
+	ordered_user_list = [(user_id,hierarchy[user_id].student_count) for user_id in hierarchy.keys() if hierarchy[user_id].student_count != 1]
+	ordered_user_list.sort(key=lambda x: -x[1])
+
+	return ordered_user_list
+
+def find_exact_set(ord_user_list,total):
+	done = False
+
+	for i in range(len(ord_user_list)):
+		if ord_user_list[i][1] > total:
+			continue
+		else:
+			partial = [ord_user_list[i][0]]
+			partial_sum = ord_user_list[i][1]
+		
+		j=i+1
+		for j in range(i+1,len(ord_user_list)):
+			if ord_user_list[i][0] in hierarchy[ord_user_list[j][0]].coach_list:
+				continue
+			elif partial_sum+ord_user_list[j][1] > total:
+				continue
+			elif partial_sum+ord_user_list[j][1] == total:
+				partial.append(ord_user_list[j][0])
+				partial_sum += ord_user_list[j][1]
+				done = True
+				break
+			else:
+				partial.append(ord_user_list[j][0])
+				partial_sum += ord_user_list[j][1]
+
+		if done == True:
+			return partial
+
+	return False
+
+
 
 
 
