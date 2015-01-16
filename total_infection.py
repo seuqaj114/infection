@@ -19,8 +19,8 @@ class User():
 		self.coach = coach
 		self.students = students
 		self.name = name
-		self.student_count = None
-		self.coach_list = None
+		self.student_count = None #turn this to 0 instead of None
+		self.coach_list = []
 
 	def __str__(self):
 		return "(version=%s, coach=%s, students=%s, name=%s, student_cnt=%s, coach_list=%s)" % \
@@ -41,6 +41,8 @@ def recursive_add(coach_id,user_list):
 			hierarchy[user_id]=User(standard_version,coach_id,None,None)
 			pass
 			
+	hierarchy["none_user"]=User(None,None,None,None)
+
 	return 0
 
 def spread_infection(user_id,version):
@@ -164,35 +166,39 @@ def get_ordered_user_list(include_singular=False):
 
 	return ordered_user_list
 
-def find_exact_set(ord_user_list,total):
-	done = False
+#	Usar esta apenas de seguida para fazer o limited infection.
+#	Fazer recursive para o exact infection e parar quando i*n < o que falta. passar para as recursivas sempre o que falta. usar global para guardar
 
-	for i in range(len(ord_user_list)):
-		if ord_user_list[i][1] > total:
+def get_best_set(sub_user_list,sub_total,previous_user_id,best_set=[]):
+	global hierarchy
+	#print "best_set = %s" % best_set
+	for i in range(len(sub_user_list)):
+		if previous_user_id in hierarchy[sub_user_list[i][0]].coach_list:
+			print previous_user_id, sub_user_list[i][0]
 			continue
+		elif sub_user_list[i][1] > sub_total:
+			continue
+		elif sub_user_list[i][1] == sub_total:
+			best_set.append(sub_user_list[i])
+			return best_set
 		else:
-			partial = [ord_user_list[i][0]]
-			partial_sum = ord_user_list[i][1]
-		
-		j=i+1
-		for j in range(i+1,len(ord_user_list)):
-			if ord_user_list[i][0] in hierarchy[ord_user_list[j][0]].coach_list:
+			a = get_best_set(sub_user_list[i+1:],sub_total-sub_user_list[i][1],sub_user_list[i][0],best_set)
+			if a == False:
 				continue
-			elif partial_sum+ord_user_list[j][1] > total:
-				continue
-			elif partial_sum+ord_user_list[j][1] == total:
-				partial.append(ord_user_list[j][0])
-				partial_sum += ord_user_list[j][1]
-				done = True
-				break
 			else:
-				partial.append(ord_user_list[j][0])
-				partial_sum += ord_user_list[j][1]
+				best_set.append(sub_user_list[i])
+				return best_set
 
-		if done == True:
-			return partial
-
+	best_set = []
 	return False
+
+def find_exact_set(ord_user_list,total):
+	global hierarchy 
+
+	exact_set = get_best_set(ord_user_list,total,"none_user",[])
+	print "exact_set = %s" % exact_set
+
+	return exact_set
 
 
 
