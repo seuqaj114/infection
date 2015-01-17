@@ -4,7 +4,7 @@ def get_ordered_user_list(collection,include_singular=False):
 
 	"""
 		Returns a list of tuples (user_id,User.student_count) from every user
-		from 'collection', ordered in decrescent order by 'student_count'.
+		from 'collection', ordered in decreasing order by 'student_count'.
 
 		If 'include_singular' is False (default) does not include users with no students.
 	"""
