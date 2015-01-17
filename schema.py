@@ -22,79 +22,77 @@ class User():
 		return "(version=%s, coach=%s, students=%s, name=%s, student_cnt=%s, coach_list=%s)" % \
 				(self.version,self.coach,self.students,self.name,self.student_count,self.coach_list)
 
-def recursive_count(user_id,hierarchy):
+def recursive_count(user_id,collection):
 
 	count = 1
 
-	for student_id in hierarchy[user_id].students:
-		count += recursive_count(student_id,hierarchy)
+	for student_id in collection[user_id].students:
+		count += recursive_count(student_id,collection)
 
 	return count
 
-def set_student_counts(hierarchy):
+def set_student_counts(collection):
 
-	for user_id in hierarchy.keys():
-		count = recursive_count(user_id,hierarchy)
-		hierarchy[user_id].student_count = count
+	for user_id in collection.keys():
+		count = recursive_count(user_id,collection)
+		collection[user_id].student_count = count
 
 	print "Student counts set."
 	return 1
 
-def set_coach_lists(hierarchy):
+def set_coach_lists(collection):
 
-	for user_id in hierarchy.keys():
-		user = hierarchy[user_id]
+	for user_id in collection.keys():
+		user = collection[user_id]
 		coach_list = []
 
 		while user.coach != None:
 			coach_list.append(user.coach)
-			user = hierarchy[user.coach]
+			user = collection[user.coach]
 
-		hierarchy[user_id].coach_list = coach_list
+		collection[user_id].coach_list = coach_list
 
 	return 1
 
-def recursive_create(coach_id,user_list,hierarchy,std_version):
+def recursive_create(coach_id,user_hierarchy,collection,std_version):
 
-	for user_id in user_list:
-		#print user_list[user_id]
-		if user_list[user_id] != None:
-			hierarchy[user_id]=User(std_version,coach_id,user_list[user_id].keys(),None)
-			recursive_create(user_id,user_list[user_id],hierarchy,std_version)
+	for user_id in user_hierarchy:
+		if user_hierarchy[user_id] != None:
+			collection[user_id]=User(std_version,coach_id,user_hierarchy[user_id].keys(),None)
+			recursive_create(user_id,user_hierarchy[user_id],collection,std_version)
 		else:
-			hierarchy[user_id]=User(std_version,coach_id,[],None)
-			pass
+			collection[user_id]=User(std_version,coach_id,[],None)
 
 	return 1
 
-def set_hierarchy(user_list,std_version=1.0):
+def set_collection(hierarchy,std_version=1.0):
 
 	""" 
-	Given an coach-student list, creates the hierarchy dict
+	Given an coach-student list, creates the collection dict
 	and its Users, like {user_id:User}.
 
 	All the Users are given the same version field at the beginning.
 	"""
-	hierarchy = {}
+	collection = {}
 
-	recursive_create(None,user_list,hierarchy,std_version)
-	set_student_counts(hierarchy)
-	set_coach_lists(hierarchy)
+	recursive_create(None,hierarchy,collection,std_version)
+	set_student_counts(collection)
+	set_coach_lists(collection)
 
-	dict_print(hierarchy)
+	dict_print(collection)
 
-	return hierarchy
+	return collection
 
-def add_user(new_user_id,coach_id,hierarchy):
-	hierarchy[new_user_id] = User(hierarchy[coach_id].version,coach_id,[],None)
-	hierarchy[coach_id].students.append(new_user_id)
+def add_user(new_user_id,coach_id,collection):
+	collection[new_user_id] = User(collection[coach_id].version,coach_id,[],None)
+	collection[coach_id].students.append(new_user_id)
 
-	user = hierarchy[new_user_id]
+	user = collection[new_user_id]
 	coach_list = []
 
 	while user.coach != None:
 		coach_list.append(user.coach)
-		user = hierarchy[user.coach]
+		user = collection[user.coach]
 		user.student_count += 1
 
-	hierarchy[new_user_id].coach_list = coach_list
+	collection[new_user_id].coach_list = coach_list
