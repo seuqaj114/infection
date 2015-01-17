@@ -1,8 +1,16 @@
 from utils import get_ordered_user_list, dict_print
 
 def infect_below(user_id,version,collection):
-	#	No need to check for version, since infection is done one-way
 
+	"""
+		Recursively infects all users below 'user_id' with 'version'.
+		Similar to 'infect_around' from total_infection, but does not spread to coaches.
+
+		Stops when there are no students left.
+	"""
+	
+	#	No need to check for version, since infection is done one-way 
+	#	(each user is visited exactly once)
 	collection[user_id].version = version
 
 	if collection[user_id].students != None:
@@ -15,23 +23,35 @@ def infect_below(user_id,version,collection):
 
 def spread_limited_infection(infect_count,version,collection,exact=False):
 
+	"""
+		Spreads a limited infection according to the number of users to infect, 'infect_count'.
+
+		'exact' defines wether EXACTLY 'infect_count' users must be infected or not.
+
+		Returns a list of infected users.
+	"""
+
+	#	Gets list of (user_id,student_count) tuples in decreasing order.
 	ord_user_list = get_ordered_user_list(collection)
 
 	if exact == False:
+		#	If not exact, get a user set that ROUGHLY approximates to the desired 'infect_count'.
 		infection_set = get_approx_set(ord_user_list,infect_count,collection)
 	else:
+		#	If exact, get a user set that infects EXACTLY 'infect_count' users.
 		infection_set = get_exact_set(ord_user_list,infect_count,collection)
 		if infection_set == False:
 			print "Exact infection impossible!"
 			return 0
 
-	#	Propagation only happens to lower levels.
+	#	Infect all levels below each user in 'infection_set'.
 	for user_id in infection_set:
 		infect_below(user_id,version,collection)
 
+	#	Print updated 'collection'.
 	dict_print(collection)
 
-	return 1
+	return infection_set
 
 def get_approx_set(ord_user_list,total,collection):
 
