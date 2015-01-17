@@ -15,7 +15,7 @@ class User():
 		self.coach = coach
 		self.students = students
 		self.name = name
-		self.student_count = None #turn this to 0 instead of None
+		self.student_count = 1
 		self.coach_list = []
 
 	def __str__(self):
@@ -65,7 +65,7 @@ def recursive_create(coach_id,user_list,hierarchy,std_version):
 			hierarchy[user_id]=User(std_version,coach_id,[],None)
 			pass
 
-	return 0
+	return 1
 
 def set_hierarchy(user_list,std_version=1.0):
 
@@ -84,3 +84,17 @@ def set_hierarchy(user_list,std_version=1.0):
 	dict_print(hierarchy)
 
 	return hierarchy
+
+def add_user(new_user_id,coach_id,hierarchy):
+	hierarchy[new_user_id] = User(hierarchy[coach_id].version,coach_id,[],None)
+	hierarchy[coach_id].students.append(new_user_id)
+
+	user = hierarchy[new_user_id]
+	coach_list = []
+
+	while user.coach != None:
+		coach_list.append(user.coach)
+		user = hierarchy[user.coach]
+		user.student_count += 1
+
+	hierarchy[new_user_id].coach_list = coach_list
