@@ -121,17 +121,17 @@ def search_exact_set(sub_user_list,sub_total,best_set,collection):
 		#	stops and the last user is appended to 'best_set'
 		elif sub_user_list[i][1] == sub_total:
 			best_set.append(sub_user_list[i][0])
-			return best_set
+			return True
 
 		#	If the number of users to be infected is still lower than 'sub_total', append current user to
 		#	'best_set' (might be poped later) and repeat the search in the sub_user_list after current user,
 		# 	for a 'sub_total' of current sub_total minus the number of users to be infected by the current user.
 		else:
 			best_set.append(sub_user_list[i][0])
-			a = search_exact_set(sub_user_list[i+1:],sub_total-sub_user_list[i][1],best_set,collection)
+			combination_found = search_exact_set(sub_user_list[i+1:],sub_total-sub_user_list[i][1],best_set,collection)
 
 			#	If the lower level search returns false, pop the current user and continue the search with the next user.
-			if a == False:
+			if combination_found == False:
 				best_set.pop()
 				continue
 
