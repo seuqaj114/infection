@@ -49,7 +49,7 @@ def spread_limited_infection(infect_count,version,collection,exact=False):
 		infect_below(user_id,version,collection)
 
 	#	Print users infected
-	print "Users infected: %s" % (infection_set)
+	print "Infected below users: %s" % (infection_set)
 
 	return infection_set
 
@@ -88,7 +88,6 @@ def get_approx_set(ord_user_list,total,collection):
 			approx_set_sum += ord_user_list[i][1]
 			approx_set.append(ord_user_list[i][0])
 
-	print "approx_set = %s" % approx_set
 	return approx_set
 
 #	Fazer recursiva para o exact e parar quando i*n < o que falta. passar para as recursivas sempre o que falta. usar global para guardar
@@ -152,6 +151,5 @@ def get_exact_set(ord_user_list,total,collection):
 	"""
 
 	exact_set = search_exact_set(ord_user_list,total,[],collection)
-	print "exact_set = %s" % exact_set
 
 	return exact_set

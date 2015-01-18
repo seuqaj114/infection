@@ -22,13 +22,13 @@ def infect_around(user_id,version,collection,infected_set):
 	#	Infect user's students, if exists.
 	if collection[user_id].students != None:
 		for student_id in collection[user_id].students:
-			spread_infection(student_id,version,collection)
+			infect_around(student_id,version,collection,infected_set)
 	else:
 		pass
 
 	#	Infect user's coach, if exists.
 	if collection[user_id].coach != None:
-		spread_infection(collection[user_id].coach,version,collection)
+		infect_around(collection[user_id].coach,version,collection,infected_set)
 	else:
 		pass
 
@@ -47,8 +47,8 @@ def spread_infection(user_id,version,collection):
 
 	infect_around(user_id,version,collection,infected_set)
 
-	#	Print users infected
-	print "Users infected: %s" % (infection_set)
+	#	Print top users infected
+	print "Infected below users: %s" % (infected_set)
 
 	return infected_set
 
