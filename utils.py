@@ -32,3 +32,20 @@ def load_default_data():
 	"""
 
 	return json.load(open("hierarchy.json"))
+
+
+def sub_dict(coach_id,collection):
+	if collection[coach_id].students == []:
+		return None
+	else:
+		return { student_id+" v"+str(collection[student_id].version): sub_dict(student_id,collection) for student_id in collection[coach_id].students }
+
+def visualize_collection(collection):
+
+	"""
+		Creates a pretty terminal visualization of the user relationships and their versions."
+	"""
+
+	dictionary = { user_id+" v"+str(user.version):sub_dict(user_id,collection) for user_id, user in collection.items() if user.coach == None}
+
+	print json.dumps(dictionary, indent=4)
