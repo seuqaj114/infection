@@ -52,7 +52,6 @@ def set_student_counts(collection):
 		count = recursive_count(user_id,collection)
 		collection[user_id].student_count = count
 
-	print "Student counts set."
 	return 1
 
 def set_coach_lists(collection):
@@ -83,7 +82,7 @@ def recursive_create(coach_id,user_hierarchy,collection,std_version):
 		user_id:User pairs.
 	"""
 
-	for user_id in user_hierarchy.keys():
+	for user_id in user_hierarchy:
 		#	If 'user_id' coaches students,
 		if user_hierarchy[user_id] != None:
 			collection[user_id]=User(std_version,coach_id,user_hierarchy[user_id].keys(),None)
@@ -110,9 +109,6 @@ def set_collection(user_hierarchy,std_version=1.0):
 	recursive_create(None,user_hierarchy,collection,std_version)
 	set_student_counts(collection)
 	set_coach_lists(collection)
-
-	#	Prints the obtained 'collection'.
-	dict_print(collection)
 
 	return collection
 
