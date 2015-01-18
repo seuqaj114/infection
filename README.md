@@ -26,22 +26,20 @@ Open a Python shell (Python 2.7).
 Import the following functions
 
 ```python
-
 from schema import set_collection
 from total_infection import spread_infection
 from limited_infection import spread_limited_infection
-from utils import load_default_data
-
+from utils import load_default_data, visualize_collection
 ```
 
 Create a ```collection``` from ```hierarchy.json```
 
 ```python
-
 collection = set_collection(load_default_data)
 ```
 
-Spread infections as you wish!
+Spread infections as you wish using ```spread_infection``` and ```spread_limited_infection``` according to 
+the source code, and ```visualize_collection``` to visualize your network's infections.
 
 
 ## Tests
