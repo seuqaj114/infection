@@ -210,7 +210,8 @@ Running exact limited infection for more users than the ones available in the ne
 
 ### Adding more users
 
-To add users to an already established network, for example, to add a user named "bale" as a student of "guy", just run ```python from schema import add_user``` and use the command:
+Because in a real-life situation not all users may be logged in by the time the network is created (the guy who's late for class should not stay out of the infection!), it is important to be able to add users to a network *a posteriori*.
+For example, to add a user named "bale", coached by "guy", just import ```python from schema import add_user``` and use the command:
 ```python
 add_user("bale","guy",collection)
 ```
