@@ -75,6 +75,8 @@ We have two main networks, led by ema and mike.
 
 Now lets make some infections!
 
+### Total infection
+
 If we want to infect mike's network with version 2.0, we simply run the command:
 
 ```python
@@ -135,7 +137,9 @@ Users infected: ['jane', u'john', u'mike', u'paul', u'jack']
 }
 ```
 
-Now for the ```limited_infection```. If we wanted to infect close to 3 users with version 4.0, running the following command would give us
+### Limited infection and exact limited infection
+
+For the ```limited_infection```,  if we wanted to infect close to 3 users with version 4.0, running the following command would give us
 
 ```python
 >>> limited_infection.spread_limited_infection(3,4.0,collection)
@@ -204,6 +208,13 @@ As we can see, the algorithm found out a combination of 2 networks containing 2 
 
 Running exact limited infection for more users than the ones available in the networks will always fail, while running the approximate limited infection in this scenario would just cause it to infect every user.
 
+### Adding more users
+
+To add users to an already established network, for example, to add a user named "bale" as a student of "guy", just run ```python from schema import add_user``` and use the command:
+```python
+add_user("bale","guy",collection)
+```
+The new user will have version of its coach.
 
 ## Benchmarks
 
