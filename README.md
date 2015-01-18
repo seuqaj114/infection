@@ -44,7 +44,7 @@ the source code, and ```visualize_collection``` to visualize your network's infe
 
 ## Examples
 
-If we use the ```hierarchy.json``` we get the following networks
+If we use the standard ```hierarchy.json``` we get the following networks
 
 ```python
 >>> collection = set_collection(load_default_data())
