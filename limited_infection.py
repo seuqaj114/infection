@@ -48,8 +48,8 @@ def spread_limited_infection(infect_count,version,collection,exact=False):
 	for user_id in infection_set:
 		infect_below(user_id,version,collection)
 
-	#	Print updated 'collection'.
-	dict_print(collection)
+	#	Print users infected
+	print "Users infected: %s" % (infection_set)
 
 	return infection_set
 

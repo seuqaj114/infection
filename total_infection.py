@@ -47,6 +47,9 @@ def spread_infection(user_id,version,collection):
 
 	infect_around(user_id,version,collection,infected_set)
 
+	#	Print users infected
+	print "Users infected: %s" % (infection_set)
+
 	return infected_set
 
 
