@@ -58,7 +58,7 @@ def set_student_counts(collection):
 def set_coach_lists(collection):
 
 	"""
-		Given 'collection', sets users' coach lists, i.e., all the users in the same standing above that user
+		Given 'collection', sets users' coach lists, i.e., all the users standing above that user
 		in the relationship tree.
 		Goes up the relationship tree until it hits a user with no coach, hence, at the top.
 	"""
