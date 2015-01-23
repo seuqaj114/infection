@@ -44,6 +44,7 @@ def spread_limited_infection(infect_count,version,collection,exact=False):
 			print "Exact infection impossible!"
 			return 0
 
+	print infection_set
 	#	Infect all levels below each user in 'infection_set'.
 	for user_id in infection_set:
 		infect_below(user_id,version,collection)
@@ -120,7 +121,7 @@ def search_exact_set(sub_user_list,sub_total,best_set,collection):
 		#	stops and the last user is appended to 'best_set'
 		elif sub_user_list[i][1] == sub_total:
 			best_set.append(sub_user_list[i][0])
-			return True
+			return best_set
 
 		#	If the number of users to be infected is still lower than 'sub_total', append current user to
 		#	'best_set' (might be poped later) and repeat the search in the sub_user_list after current user,
@@ -140,7 +141,7 @@ def search_exact_set(sub_user_list,sub_total,best_set,collection):
 
 	#	If the end of 'sub_user_list' is reached, no exact combination was found in the current recursion level, 
 	#	so it returns False in order to pop the previous user.
-	best_set = []
+
 	return False
 
 
