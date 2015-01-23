@@ -36,7 +36,7 @@ from utils import load_default_data, visualize_collection
 Create a ```collection``` from ```hierarchy.json```
 
 ```python
-collection = set_collection(load_default_data)
+collection = set_collection(load_default_data())
 ```
 
 Spread infections as you wish using ```total_infection.spread_infection``` and ```limited_infection.spread_limited_infection``` according to 
